@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "dev": "ts-node index.ts",
-    "server": "ts-node --transpile-only --compiler-options '{\"module\":\"commonjs\"}' index.ts",
-    "client": "cd ../ && npm run dev --prefix frontend",
+    "dev": "ts-node --transpile-only index.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },

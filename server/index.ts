@@ -1,18 +1,14 @@
 import express, { Request, Response } from "express";
-import Stripe from "stripe";
 import cors from "cors";
 import dotenv from "dotenv";
-import nodemailer from "nodemailer";
 import bodyParser from "body-parser";
 import fs from "fs";
 import path from "path";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
 const app = express();
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2024-06-20" as any,
-});
 
 // --- File for admin override ---
 const statusFile = path.join(__dirname, "restaurant-status.json");
@@ -70,12 +66,24 @@ function getRestaurantOpen(): boolean {
 }
 
 // --- Middleware ---
-app.use("/webhook", bodyParser.raw({ type: "application/json" })); // Stripe webhook
-app.use(express.json()); // must come before toggle/status
+app.use("/webhook", bodyParser.raw({ type: "application/json" }));
+app.use(express.json());
+
+// ✅ Flexible CORS setup
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://grannys-takeaway.co.uk"] // change to your live domain
+    : ["http://localhost:5173", "http://localhost:5174"];
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS blocked: " + origin));
+      }
+    },
     credentials: true,
   })
 );
@@ -93,10 +101,8 @@ app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
 
   res.flushHeaders?.();
-
   res.write(`data: ${JSON.stringify({ open: getRestaurantOpen() })}\n\n`);
 
   clients.push(res);
@@ -128,64 +134,52 @@ app.post("/admin/toggle", (req: Request, res: Response) => {
   res.json({ success: true, open });
 });
 
-// ✅ Stripe checkout
-app.post("/create-checkout-session", async (req: Request, res: Response) => {
-  const { cart, customer } = req.body;
+// ✅ Contact form route (Nodemailer)
+app.post("/contact", async (req: Request, res: Response) => {
+  const { name, email, message } = req.body;
 
-  if (!getRestaurantOpen()) {
-    return res.status(403).json({
-      error: "❌ Restaurant is currently CLOSED. Please try again later.",
-    });
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: "All fields are required" });
   }
 
   try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      mode: "payment",
-      line_items: cart.map((item: any) => ({
-        price_data: {
-          currency: "gbp",
-          product_data: { name: item.name },
-          unit_amount: Math.round(item.price * 100),
-        },
-        quantity: item.quantity,
-      })),
-      customer_email: customer.email,
-      success_url: "http://localhost:5173/success",
-      cancel_url: "http://localhost:5173/checkout",
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USER, // Gmail address
+        pass: process.env.GMAIL_PASS, // App password
+      },
     });
 
-    res.json({ id: session.id });
-  } catch (err: any) {
-    console.error("Stripe session error:", err.message);
-    res.status(500).json({ error: err.message });
+    await transporter.sendMail({
+      from: `"Website Contact" <${process.env.GMAIL_USER}>`,
+      to: process.env.GMAIL_USER, // send to yourself
+      subject: `📩 New Contact Form Message from ${name}`,
+      text: `From: ${name} (${email})\n\n${message}`,
+      html: `<p><b>From:</b> ${name} (${email})</p><p>${message}</p>`,
+    });
+
+    res.json({ success: true, message: "Message sent successfully ✅" });
+  } catch (err) {
+    console.error("Email error:", err);
+    res.status(500).json({ error: "Failed to send message ❌" });
   }
 });
 
-// ✅ Stripe webhook
-app.post("/webhook", (req: Request, res: Response) => {
-  const sig = req.headers["stripe-signature"] as string;
+// ✅ Serve React frontend in production
+const __dirnamePath = path.resolve();
+const frontendPath = path.join(__dirnamePath, "../frontend/dist");
 
-  let event: Stripe.Event;
-  try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET as string
-    );
-  } catch (err: any) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
+if (fs.existsSync(frontendPath)) {
+  app.use(express.static(frontendPath));
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object as Stripe.Checkout.Session;
-    console.log("✅ Payment completed:", session);
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
+}
 
-    // TODO: send confirmation email here if needed
-  }
-
-  res.json({ received: true });
-});
-
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`✅ Server running on http://localhost:${PORT}`)
+);

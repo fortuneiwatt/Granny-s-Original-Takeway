@@ -3,51 +3,51 @@ import ProductCard from "../components/ProductCard";
 
 // 📌 Caribbean Menu
 const caribbeanFavourites = [
-  { id: 1, name: "Curry Goat", price: 9.5, image: "/images/menu/Curry goat.jpg" },
-  { id: 2, name: "Oxtail", price: 9.5, image: "/images/menu/Oxtail.jpg" },
-  { id: 3, name: "Jerk Chicken", price: 9.5, image: "/images/menu/JERK CHICKEN.jpg" },
-  { id: 4, name: "Fried Chicken", price: 9.5, image: "/images/menu/fried chicken.jpg" },
-  { id: 5, name: "Stew Chicken", price: 9.5, image: "/images/menu/stew chicken.jpg" },
-  { id: 6, name: "Chicken Curry", price: 9.5, image: "/images/menu/Curry chicken.jpg" },
-  { id: 7, name: "Ackee & Saltfish", price: 8.5, image: "/images/menu/ackee & saltfish.jpg" },
-  { id: 8, name: "Cow Foot", price: 9.5, image: "/images/menu/cow foot.jpg" },
-  { id: 9, name: "Stewed Prawns", price: 7.95, image: "/images/menu/stewed prawns.jpg" },
-  { id: 10, name: "Soup", price: 6.5, image: "/images/menu/soup.jpg" },
-  { id: 11, name: "Sea Bass", price: 6.5, image: "/images/menu/sea bass.jpg" },
+  { id: 1, name: "Curry Goat", price: 12.5, image: "/images/menu/Curry goat.jpg" },
+  { id: 2, name: "Oxtail", price: 12.5, image: "/images/menu/Oxtail.jpg" },
+  { id: 3, name: "Jerk Chicken", price: 12.5, image: "/images/menu/JERK CHICKEN.jpg" },
+  { id: 4, name: "Fried Chicken", price: 12.5, image: "/images/menu/fried chicken.jpg" },
+  { id: 5, name: "Stew Chicken", price: 12.5, image: "/images/menu/stew chicken.jpg" },
+  { id: 6, name: "Chicken Curry", price: 12.5, image: "/images/menu/Curry chicken.jpg" },
+  { id: 7, name: "Ackee & Saltfish", price: 12.5, image: "/images/menu/ackee & saltfish.jpg" },
+  { id: 8, name: "Cow Foot", price: 15.5, image: "/images/menu/cow foot.jpg" },
+  { id: 9, name: "Stewed Prawns", price: 10.95, image: "/images/menu/stewed prawns.jpg" },
+  { id: 10, name: "Soup", price: 9.0, image: "/images/menu/soup.jpg" },
+  { id: 11, name: "Sea Bass", price: 9.0, image: "/images/menu/sea bass.jpg" },
 ];
 
 const caribbeanSnacks = [
-  { id: 12, name: "Fried Dumplings", price: 2.5, image: "/images/menu/fried dumplings.jpg" },
-  { id: 13, name: "Festival", price: 2.5, image: "/images/menu/festival.jpg" },
-  { id: 14, name: "Fritters", price: 4.0, image: "/images/menu/fritters.jpg" },
-  { id: 15, name: "Plantain", price: 4.0, image: "/images/menu/plantain.jpg" },
+  { id: 12, name: "Fried Dumplings", price: 5.5, image: "/images/menu/fried dumplings.jpg" },
+  { id: 13, name: "Festival", price: 5.5, image: "/images/menu/festival.jpg" },
+  { id: 14, name: "Fritters", price: 7.75, image: "/images/menu/fritters.jpg" },
+  { id: 15, name: "Plantain", price: 7.75, image: "/images/menu/plantain.jpg" },
 ];
 
 // 📌 African Menu
 const africanSoups = [
-  { id: 16, name: "Afang Soup", price: 15.0, image: "/images/menu/afang.jpg" },
-  { id: 17, name: "Egusi Soup", price: 15.0, image: "/images/menu/egusi.jpg" },
-  { id: 18, name: "Ogbono Soup", price: 15.0, image: "/images/menu/ogbono soup.jpg" },
-  { id: 19, name: "Okra Soup", price: 15.0, image: "/images/menu/Okra soup.jpg" },
-  { id: 20, name: "Pepper Soup", price: 13.0, image: "/images/menu/peppersoup.jpg" },
+  { id: 16, name: "Afang Soup", price: 19.5, image: "/images/menu/afang.jpg" },
+  { id: 17, name: "Egusi Soup", price: 19.5, image: "/images/menu/egusi.jpg" },
+  { id: 18, name: "Ogbono Soup", price: 19.5, image: "/images/menu/ogbono soup.jpg" },
+  { id: 19, name: "Okra Soup", price: 19.5, image: "/images/menu/Okra soup.jpg" },
+  { id: 20, name: "Pepper Soup", price: 16.9, image: "/images/menu/peppersoup.jpg" },
 ];
 
 const africanSwallows = [
-  { id: 21, name: "Amala", price: 4.5, image: "/images/menu/amala.jpg" },
-  { id: 22, name: "Eba", price: 4.5, image: "/images/menu/eba.jpg" },
-  { id: 23, name: "Poundo", price: 4.5, image: "/images/menu/poundo.jpg" },
-  { id: 24, name: "Semolina", price: 4.5, image: "/images/menu/semolina.jpg" },
-  { id: 25, name: "Plantain Fufu", price: 4.5, image: "/images/menu/plantain fufu.jpg" },
+  { id: 21, name: "Amala", price: 7.75, image: "/images/menu/amala.jpg" },
+  { id: 22, name: "Eba", price: 7.75, image: "/images/menu/eba.jpg" },
+  { id: 23, name: "Poundo", price: 7.75, image: "/images/menu/poundo.jpg" },
+  { id: 24, name: "Semolina", price: 7.75, image: "/images/menu/semolina.jpg" },
+  { id: 25, name: "Plantain Fufu", price: 7.75, image: "/images/menu/plantain fufu.jpg" },
 ];
 
 const africanDelights = [
-  { id: 26, name: "Rice & Peas", price: 8.5, image: "/images/menu/rice&peas.jpg" },
-  { id: 27, name: "Jollof Rice", price: 7.0, image: "/images/menu/jollof_Rice_with_Stew.jpg" },
-  { id: 28, name: "Fried Rice", price: 7.0, image: "/images/menu/fried rice.jpg" },
-  { id: 29, name: "Fried Yam", price: 6.0, image: "/images/menu/fried yam.jpg" },
-  { id: 30, name: "Plantain", price: 4.0, image: "/images/menu/plantain2.jpg" },
-  { id: 31, name: "Moi Moi", price: 4.0, image: "/images/menu/moimoi.jpg" },
-  { id: 32, name: "White Rice", price: 3.5, image: "/images/menu/white rice.jpg" },
+  { id: 26, name: "Rice & Peas", price: 11.75, image: "/images/menu/rice&peas.jpg" },
+  { id: 27, name: "Jollof Rice", price: 10.75, image: "/images/menu/jollof_Rice_with_Stew.jpg" },
+  { id: 28, name: "Fried Rice", price: 10.75, image: "/images/menu/fried rice.jpg" },
+  { id: 29, name: "Fried Yam", price: 9.75, image: "/images/menu/fried yam.jpg" },
+  { id: 30, name: "Plantain", price: 7.75, image: "/images/menu/plantain2.jpg" },
+  { id: 31, name: "Moi Moi", price: 7.75, image: "/images/menu/moimoi.jpg" },
+  { id: 32, name: "White Rice", price: 6.75, image: "/images/menu/white rice.jpg" },
 ];
 
 // 📌 Seafood (Special)

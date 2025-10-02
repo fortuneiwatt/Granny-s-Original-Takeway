@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
+// ✅ Auto-switch API base (local vs deployed)
+const API_BASE =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "";
+
 export default function Admin() {
   const [loggedIn, setLoggedIn] = useState<boolean>(
     Cookies.get("admin-auth") === "true"
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isOpen, setIsOpen] = useState<boolean>(false); // ✅ default = closed
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
 
   // ✅ SSE with auto-reconnect
@@ -17,7 +23,7 @@ export default function Admin() {
     let events: EventSource | null = null;
 
     const connect = () => {
-      events = new EventSource("http://localhost:5000/events");
+      events = new EventSource(`${API_BASE}/events`);
 
       events.onmessage = (e) => {
         try {
@@ -31,7 +37,7 @@ export default function Admin() {
       };
 
       events.onerror = () => {
-        console.warn("SSE connection lost. Retrying in 3s...");
+        console.warn("⚠️ SSE connection lost. Retrying in 3s...");
         events?.close();
         setTimeout(connect, 3000);
       };
@@ -52,7 +58,7 @@ export default function Admin() {
       password === import.meta.env.VITE_ADMIN_PASS
     ) {
       setLoggedIn(true);
-      Cookies.set("admin-auth", "true", { expires: 1 }); // store for 1 day
+      Cookies.set("admin-auth", "true", { expires: 1 });
     } else {
       alert("Invalid admin credentials ❌");
     }
@@ -67,7 +73,7 @@ export default function Admin() {
     try {
       setLoading(true);
       const newStatus = !isOpen;
-      const res = await fetch("http://localhost:5000/admin/toggle", {
+      const res = await fetch(`${API_BASE}/admin/toggle`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ open: newStatus }),
@@ -75,12 +81,12 @@ export default function Admin() {
 
       if (!res.ok) {
         const err = await res.json();
-        alert(err.error || "Failed to update restaurant status ❌");
+        alert(err.error || "❌ Failed to update restaurant status");
       }
       // ✅ SSE will auto-update isOpen
     } catch (err) {
       console.error("Toggle error:", err);
-      alert("Server error while updating status");
+      alert("❌ Server error while updating status");
     } finally {
       setLoading(false);
     }
@@ -136,7 +142,7 @@ export default function Admin() {
 
       <button
         onClick={toggleOpen}
-        disabled={loading} // ✅ only disable while updating
+        disabled={loading}
         className={`px-6 py-3 rounded-lg text-white font-semibold transition ${
           isOpen
             ? "bg-red-600 hover:bg-red-700"

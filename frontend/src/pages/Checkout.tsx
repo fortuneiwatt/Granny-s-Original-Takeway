@@ -1,18 +1,25 @@
 import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { loadStripe } from "@stripe/stripe-js";
-import { GoogleMap, useLoadScript, Autocomplete } from "@react-google-maps/api";
+import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 
-// ✅ Load Stripe public key
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY as string);
+// ✅ Store URLs (set these in your .env once live)
+const DELIVEROO_STORE_URL = import.meta.env.VITE_DELIVEROO_STORE_URL || null;
+const UBEREATS_STORE_URL = import.meta.env.VITE_UBEREATS_STORE_URL || null;
+const JUSTEAT_STORE_URL = import.meta.env.VITE_JUSTEAT_STORE_URL || null;
+
+// ✅ Auto-switch API base (local vs deployed)
+const API_BASE =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "";
 
 export default function CheckoutPage() {
   const { cart } = useCart();
-  const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState<boolean | null>(null);
   const [address, setAddress] = useState("");
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string,
@@ -23,7 +30,7 @@ export default function CheckoutPage() {
 
   // ✅ Listen to restaurant status via SSE
   useEffect(() => {
-    const events = new EventSource("http://localhost:5000/events");
+    const events = new EventSource(`${API_BASE}/events`);
     events.onmessage = (e) => {
       try {
         const data = JSON.parse(e.data);
@@ -35,46 +42,12 @@ export default function CheckoutPage() {
       }
     };
     events.onerror = () => {
+      console.warn("⚠️ SSE connection lost, closing stream.");
       events.close();
       setOpen(false);
     };
     return () => events.close();
   }, []);
-
-  const handleCheckout = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!open) {
-      alert("❌ Restaurant is closed.");
-      return;
-    }
-    setLoading(true);
-
-    const formData = new FormData(e.target as HTMLFormElement);
-    const customer = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      address, // use autocomplete result
-    };
-
-    try {
-      const res = await fetch("http://localhost:5000/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cart, customer }),
-      });
-      const data = await res.json();
-
-      if (data.id) {
-        const stripe = await stripePromise;
-        await stripe?.redirectToCheckout({ sessionId: data.id });
-      } else {
-        alert(data.error || "Something went wrong.");
-        setLoading(false);
-      }
-    } catch {
-      setLoading(false);
-    }
-  };
 
   if (cart.length === 0) {
     return (
@@ -99,13 +72,12 @@ export default function CheckoutPage() {
       {open === null ? (
         <p className="text-center text-gray-600">Checking restaurant status...</p>
       ) : (
-        <form onSubmit={handleCheckout} className="space-y-4">
+        <div className="space-y-4">
           {/* Full Name */}
           <div>
             <label className="block font-medium mb-1">Full Name</label>
             <input
               type="text"
-              name="name"
               required
               className="w-full border px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-400"
             />
@@ -116,7 +88,6 @@ export default function CheckoutPage() {
             <label className="block font-medium mb-1">Email</label>
             <input
               type="email"
-              name="email"
               required
               className="w-full border px-4 py-2 rounded-lg focus:ring-2 focus:ring-red-400"
             />
@@ -156,18 +127,66 @@ export default function CheckoutPage() {
             <p className="mt-3 font-bold">Total: £{total.toFixed(2)}</p>
           </div>
 
+          {/* Platform Buttons */}
           {open ? (
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full px-6 py-3 rounded-lg shadow font-semibold transition ${
-                loading
-                  ? "bg-gray-400 text-white cursor-not-allowed"
-                  : "bg-red-600 text-white hover:bg-red-700"
-              }`}
-            >
-              {loading ? "Processing..." : "Pay with Card 💳"}
-            </button>
+            <div className="space-y-3">
+              {/* Deliveroo */}
+              {DELIVEROO_STORE_URL ? (
+                <a
+                  href={DELIVEROO_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold transition bg-green-600 text-white hover:bg-green-700"
+                >
+                  🛵 Order via Deliveroo
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold bg-gray-400 text-white cursor-not-allowed"
+                >
+                  🚧 Deliveroo – Coming Soon
+                </button>
+              )}
+
+              {/* Uber Eats */}
+              {UBEREATS_STORE_URL ? (
+                <a
+                  href={UBEREATS_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold transition bg-green-600 text-white hover:bg-green-700"
+                >
+                  🚗 Order via Uber Eats
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold bg-gray-400 text-white cursor-not-allowed"
+                >
+                  🚧 Uber Eats – Coming Soon
+                </button>
+              )}
+
+              {/* Just Eat */}
+              {JUSTEAT_STORE_URL ? (
+                <a
+                  href={JUSTEAT_STORE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold transition bg-green-600 text-white hover:bg-green-700"
+                >
+                  🍽️ Order via Just Eat
+                </a>
+              ) : (
+                <button
+                  disabled
+                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold bg-gray-400 text-white cursor-not-allowed"
+                >
+                  🚧 Just Eat – Coming Soon
+                </button>
+              )}
+            </div>
           ) : (
             <div className="text-center mt-6">
               <span className="px-5 py-3 bg-red-600 text-white rounded-lg font-bold text-lg shadow">
@@ -175,7 +194,7 @@ export default function CheckoutPage() {
               </span>
             </div>
           )}
-        </form>
+        </div>
       )}
     </div>
   );

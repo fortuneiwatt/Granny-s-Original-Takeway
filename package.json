@@ -1,49 +1,13 @@
 {
-  "name": "african-caribbean-fusion",
+  "name": "grannys-takeaway",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@headlessui/react": "^2.2.8",
-    "@heroicons/react": "^2.2.0",
-    "@react-google-maps/api": "^2.20.7",
-    "@stripe/react-stripe-js": "^4.0.2",
-    "@stripe/stripe-js": "^7.9.0",
-    "@tanstack/react-query": "^5.89.0",
-    "axios": "^1.12.2",
-    "clsx": "^2.1.1",
-    "js-cookie": "^3.0.5",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-router-dom": "^7.9.1",
-    "zod": "^4.1.9"
+    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix frontend\"",
+    "build": "npm run build --prefix server && npm run build --prefix frontend",
+    "start": "concurrently \"npm run start --prefix server\" \"npm run preview --prefix frontend\""
   },
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
-    "@types/js-cookie": "^3.0.6",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "@vitejs/plugin-react": "^5.0.0",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^9.33.0",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.3.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.1.6",
-    "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.13",
-    "typescript": "~5.8.3",
-    "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2",
-    "vitest": "^3.2.4"
+    "concurrently": "^9.2.1"
   }
 }

@@ -39,10 +39,18 @@ function isOpenNow() {
   return ukTime >= openTime && ukTime <= closeTime;
 }
 
+// ✅ Auto-switch backend URL
+const API_BASE =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "";
+
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [open, setOpen] = useState<boolean | null>(null); // null = loading
   const [todayIndex, setTodayIndex] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const now = new Date();
@@ -52,7 +60,7 @@ export default function Contact() {
     setTodayIndex(ukTime.getDay() === 0 ? 6 : ukTime.getDay() - 1);
 
     // ✅ Use SSE for live updates
-    const events = new EventSource("http://localhost:5000/events");
+    const events = new EventSource(`${API_BASE}/events`);
 
     events.onmessage = (e) => {
       try {
@@ -81,10 +89,32 @@ export default function Contact() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Message sent by ${form.name} (${form.email}): ${form.message}`);
-    setForm({ name: "", email: "", message: "" });
+    setLoading(true);
+    setStatus(null);
+
+    try {
+      const res = await fetch(`${API_BASE}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setStatus("✅ Message sent successfully!");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        setStatus(data.error || "❌ Failed to send message.");
+      }
+    } catch (err) {
+      console.error("Contact form error:", err);
+      setStatus("❌ Server error. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -195,10 +225,21 @@ export default function Contact() {
 
           <button
             type="submit"
-            className="w-full sm:w-auto bg-red-600 text-white px-6 py-3 rounded-md hover:bg-red-700 transition"
+            disabled={loading}
+            className={`w-full sm:w-auto px-6 py-3 rounded-md text-white transition ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-red-600 hover:bg-red-700"
+            }`}
           >
-            Send Message
+            {loading ? "Sending..." : "Send Message"}
           </button>
+
+          {status && (
+            <p className="mt-3 text-sm font-medium text-center sm:text-left">
+              {status}
+            </p>
+          )}
         </form>
       </div>
     </div>

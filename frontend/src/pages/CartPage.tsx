@@ -102,33 +102,19 @@ export default function CartPage() {
       {/* Delivery Platforms */}
       <div className="mt-10 text-center space-y-4">
         <p className="text-lg font-semibold text-gray-700">
-          Prefer delivery with your favorite app?
+          Get Your Meal Delivered To your Doorstep
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <a
-            href="https://www.ubereats.com/gb/store/YOUR-RESTAURANT-ID"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 transition flex items-center gap-2"
-          >
-            🚗 Order with Uber Eats
-          </a>
+         
           <a
             href="https://deliveroo.co.uk/menu/birmingham/YOUR-RESTAURANT-ID"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2"
           >
-            🛵 Order with Deliveroo
+            🛵 Delivery Coming Soon
           </a>
-          <a
-            href="https://www.just-eat.co.uk/restaurants-YOUR-RESTAURANT-ID/menu"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-orange-600 text-white px-6 py-3 rounded-lg shadow hover:bg-orange-700 transition flex items-center gap-2"
-          >
-            🍴 Order with Just Eat
-          </a>
+         
         </div>
       </div>
     </div>

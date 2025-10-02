@@ -12,7 +12,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="relative z-10 px-6 max-w-3xl">
           <h1 className="text-5xl md:text-6xl font-extrabold drop-shadow-lg">
-            Welcome to Granyy's Original Takeway
+            Welcome to African Carribbean Fusion at Granyy's Original Takeway
           </h1>
           <p className="mt-6 text-lg md:text-2xl text-gray-200 drop-shadow">
             Relax, indulge, and savor authentic African & Caribbean flavors —
