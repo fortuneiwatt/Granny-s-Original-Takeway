@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <NavLink to="/" className="text-xl sm:text-2xl font-extrabold tracking-wide">
-          🍲 African Caribbean Fusion
+          🍲 Afro-Caribbean Fusion
         </NavLink>
 
         {/* Desktop Links */}

@@ -26,7 +26,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="bg-black text-gray-300 text-center py-3 text-sm">
-        © {new Date().getFullYear()} African Caribbean Fusion. All rights reserved.
+        © {new Date().getFullYear()} African Caribbean Fusion. All rights reserved. @Dev_fortunei.
       </div>
     </footer>
   );
