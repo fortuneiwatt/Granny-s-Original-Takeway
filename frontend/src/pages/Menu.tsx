@@ -1,123 +1,380 @@
-import { useState } from "react";
-import ProductCard from "../components/ProductCard";
+import { useState, useEffect } from "react";
+import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
-// 📌 Caribbean Menu
-const caribbeanFavourites = [
-  { id: 1, name: "Curry Goat", price: 12.5, image: "/images/menu/Curry goat.jpg" },
-  { id: 2, name: "Oxtail", price: 12.5, image: "/images/menu/Oxtail.jpg" },
-  { id: 3, name: "Jerk Chicken", price: 12.5, image: "/images/menu/JERK CHICKEN.jpg" },
-  { id: 4, name: "Fried Chicken", price: 12.5, image: "/images/menu/fried chicken.jpg" },
-  { id: 5, name: "Stew Chicken", price: 12.5, image: "/images/menu/stew chicken.jpg" },
-  { id: 6, name: "Chicken Curry", price: 12.5, image: "/images/menu/Curry chicken.jpg" },
-  { id: 7, name: "Ackee & Saltfish", price: 12.5, image: "/images/menu/ackee & saltfish.jpg" },
-  { id: 8, name: "Cow Foot", price: 15.5, image: "/images/menu/cow foot.jpg" },
-  { id: 9, name: "Stewed Prawns", price: 10.95, image: "/images/menu/stewed prawns.jpg" },
-  { id: 10, name: "Soup", price: 9.0, image: "/images/menu/soup.jpg" },
-  { id: 11, name: "Sea Bass", price: 9.0, image: "/images/menu/sea bass.jpg" },
+// 🧩 Type definitions
+type VarietyItem = {
+  name: string;
+  price: number;
+  image: string;
+};
+
+type MenuItem = {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+  varieties?: VarietyItem[];
+};
+
+// === MENU DATA ===
+
+// 🥘 African Soups (with varieties)
+const africanSoups: MenuItem[] = [
+  {
+    id: 1,
+    name: "Afang Soup",
+    price: 0,
+    image: "/images/menu/afang.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Egusi Soup",
+    price: 0,
+    image: "/images/menu/egusi.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
+  {
+    id: 3,
+    name: "Ogbono Soup",
+    price: 0,
+    image: "/images/menu/ogbono soup.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
+  {
+    id: 4,
+    name: "Okra Soup",
+    price: 0,
+    image: "/images/menu/okra soup.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
+  {
+    id: 5,
+    name: "Pepper Soup",
+    price: 0,
+    image: "/images/menu/peppersoup.jpg",
+    varieties: [
+      { name: "With White Rice", price: 15.0, image: "/images/menu/white rice.jpg" },
+    ],
+  },
+  {
+    id: 6,
+    name: "Edikaikong Soup",
+    price: 0,
+    image: "/images/menu/vegetablesoup.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
+  {
+    id: 22,
+    name: "Fisherman Soup",
+    price: 0,
+    image: "/images/menu/fishermansoup.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
+  {
+    id: 23,
+    name: "Bitterleaf Soup",
+    price: 0,
+    image: "/images/menu/bitterleaf soup.jpg",
+    varieties: [
+      { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
+      { name: "With Eba", price: 15.0, image: "/images/menu/eba.jpg" },
+      { name: "With Amala", price: 15.0, image: "/images/menu/amala.jpg" },
+      { name: "With Semolina", price: 15.0, image: "/images/menu/semolina.jpg" },
+      { name: "With Plantain Fufu", price: 15.0, image: "/images/menu/plantain fufu.jpg" },
+    ],
+  },
 ];
 
-const caribbeanSnacks = [
-  { id: 12, name: "Fried Dumplings", price: 5.5, image: "/images/menu/fried dumplings.jpg" },
-  { id: 13, name: "Festival", price: 5.5, image: "/images/menu/festival.jpg" },
-  { id: 14, name: "Fritters", price: 7.75, image: "/images/menu/fritters.jpg" },
-  { id: 15, name: "Plantain", price: 7.75, image: "/images/menu/plantain.jpg" },
+// 🍚 African Delights (with expanded varieties)
+const africanDelights: MenuItem[] = [
+  {
+    id: 7,
+    name: "White Rice",
+    price: 0,
+    image: "/images/menu/white rice.jpg",
+    varieties: [
+      { name: "With Stew", price: 12.0, image: "/images/menu/stew.jpg" },
+      { name: "With Pepper Soup", price: 12.0, image: "/images/menu/peppersoup.jpg" },
+      { name: "With Curry Prawns", price: 12.0, image: "/images/menu/stewed prawns.jpg" },
+      { name: "With Fried Plantain & Stew", price: 12.0, image: "/images/menu/fried plantain.jpg" },
+      { name: "With Chicken Stew", price: 12.0, image: "/images/menu/chicken stew.jpg" },
+      { name: "With fresh-fish Stew", price: 12.0, image: "/images/menu/fish stew.jpg" },
+    ],
+  },
+  {
+    id: 8,
+    name: "Jollof Rice",
+    price: 10.75,
+    image: "/images/menu/jollof.jpg",
+    varieties: [
+      { name: "With Fried Plantain", price: 13.0, image: "/images/menu/fried plantain.jpg" },
+      { name: "With Chicken", price: 13.0, image: "/images/menu/curry chicken.jpg" },
+      { name: "With Curry Goat", price: 13.0, image: "/images/menu/curry goat.jpg" },
+      { name: "With Jerk Chicken", price: 13.0, image: "/images/menu/JERK CHICKEN.jpg" },
+      { name: "With Chicken stew", price: 13.0, image: "/images/menu/chicken stew.jpg" },
+      { name: "With Stewed prawns", price: 13.0, image: "/images/menu/stewed prawns.jpg" },
+      { name: "With fried fish", price: 13.0, image: "/images/menu/fried fish.jpg" },
+      { name: "With fried meat", price: 13.0, image: "/images/menu/fried meat.jpg" },
+    ],
+  },
+  {
+    id: 9,
+    name: "Fried Rice",
+    price: 10.75,
+    image: "/images/menu/fried rice.jpg",
+    varieties: [
+      { name: "With Fried Plantain", price: 13.0, image: "/images/menu/fried plantain.jpg" },
+      { name: "With Chicken", price: 13.0, image: "/images/menu/curry chicken.jpg" },
+      { name: "With Curry Goat", price: 13.0, image: "/images/menu/curry goat.jpg" },
+      { name: "With Jerk Chicken", price: 13.0, image: "/images/menu/JERK CHICKEN.jpg" },
+      { name: "With Stew Chicken", price: 13.0, image: "/images/menu/chicken stew.jpg" },
+      { name: "With Stewed prawns", price: 13.0, image: "/images/menu/stewed prawns.jpg" },
+      { name: "With fried fish", price: 13.0, image: "/images/menu/fried fish.jpg" },
+      { name: "With fried meat", price: 13.0, image: "/images/menu/fried meat.jpg" },
+    ],
+  },
+  { id: 10, name: "Moi Moi", price: 7.75, image: "/images/menu/moimoi.jpg" },
+  { id: 11, name: "Plantain", price: 7.75, image: "/images/menu/fried plantain.jpg", 
+    varieties: [
+      { name: "With Stew ", price: 10.0, image: "/images/menu/stew.jpg" },
+    ],
+  },
+  { id: 20, name: "Fried Yam", price: 7.75,image: "/images/menu/fried yam.jpg",
+    varieties: [
+      { name: "With Stew ", price: 10.0, image: "/images/menu/stew.jpg" },
+    ],
+
+   }
 ];
 
-// 📌 African Menu
-const africanSoups = [
-  { id: 16, name: "Afang Soup", price: 19.5, image: "/images/menu/afang.jpg" },
-  { id: 17, name: "Egusi Soup", price: 19.5, image: "/images/menu/egusi.jpg" },
-  { id: 18, name: "Ogbono Soup", price: 19.5, image: "/images/menu/ogbono soup.jpg" },
-  { id: 19, name: "Okra Soup", price: 19.5, image: "/images/menu/Okra soup.jpg" },
-  { id: 20, name: "Pepper Soup", price: 16.9, image: "/images/menu/peppersoup.jpg" },
+// 🍗 Caribbean Favourites
+const caribbeanFavourites: MenuItem[] = [
+  { id: 12, name: "Curry Goat", price: 12.5, image: "/images/menu/Curry goat.jpg" },
+  { id: 13, name: "Oxtail", price: 12.5, image: "/images/menu/Oxtail.jpg" },
+  { id: 14, name: "Jerk Chicken", price: 12.5, image: "/images/menu/JERK CHICKEN.jpg" },
+  { id: 15, name: "Stew Chicken", price: 12.5, image: "/images/menu/stew chicken.jpg" },
+  { id: 21, name: "seafood combo", price: 12.5, image: "/images/menu/sea food combo.jpg"}
 ];
 
-const africanSwallows = [
-  { id: 21, name: "Amala", price: 7.75, image: "/images/menu/amala.jpg" },
-  { id: 22, name: "Eba", price: 7.75, image: "/images/menu/eba.jpg" },
-  { id: 23, name: "Poundo", price: 7.75, image: "/images/menu/poundo.jpg" },
-  { id: 24, name: "Semolina", price: 7.75, image: "/images/menu/semolina.jpg" },
-  { id: 25, name: "Plantain Fufu", price: 7.75, image: "/images/menu/plantain fufu.jpg" },
+// 🍩 Caribbean Snacks
+const caribbeanSnacks: MenuItem[] = [
+  { id: 16, name: "Fried Dumplings", price: 5.5, image: "/images/menu/fried dumplings.jpg" },
+  { id: 17, name: "Festival", price: 5.5, image: "/images/menu/festival.jpg" },
+  { id: 18, name: "Fritters", price: 7.75, image: "/images/menu/fritters.jpg" },
 ];
 
-const africanDelights = [
-  { id: 26, name: "Rice & Peas", price: 11.75, image: "/images/menu/rice&peas.jpg" },
-  { id: 27, name: "Jollof Rice", price: 10.75, image: "/images/menu/jollof_Rice_with_Stew.jpg" },
-  { id: 28, name: "Fried Rice", price: 10.75, image: "/images/menu/fried rice.jpg" },
-  { id: 29, name: "Fried Yam", price: 9.75, image: "/images/menu/fried yam.jpg" },
-  { id: 30, name: "Plantain", price: 7.75, image: "/images/menu/plantain2.jpg" },
-  { id: 31, name: "Moi Moi", price: 7.75, image: "/images/menu/moimoi.jpg" },
-  { id: 32, name: "White Rice", price: 6.75, image: "/images/menu/white rice.jpg" },
-];
-
-// 📌 Seafood (Special)
-const seafood = [
-  { id: 33, name: "Crayfish", price: 0, image: "/images/menu/crayfishb.jpg"} 
+// 🌊 Seafood
+const seafood: MenuItem[] = [
+  { id: 19, name: "Crayfish", price: 0, image: "/images/menu/crayfishb.jpg" },
 ];
 
 export default function Menu() {
-  const [activeTab, setActiveTab] = useState("Caribbean Favourites");
+  const { addToCart, cart } = useCart();
+  const [activeTab, setActiveTab] = useState("African Soups");
+  const [expandedItem, setExpandedItem] = useState<number | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showCartButton, setShowCartButton] = useState(false);
+
+  // ✳️ Show floating cart when items are added
+  useEffect(() => {
+    if (cart.length > 0) setShowCartButton(true);
+  }, [cart]);
+
+  const handleAddToCart = (item: MenuItem, variety?: VarietyItem) => {
+    const product = variety
+      ? {
+          id: `${item.id}-${variety.name}`,
+          name: `${item.name} (${variety.name})`,
+          price: variety.price,
+          image: variety.image,
+          quantity: 1,
+        }
+      : {
+          id: `${item.id}`,
+          name: item.name,
+          price: item.price,
+          image: item.image,
+          quantity: 1,
+        };
+
+    addToCart(product);
+    setToastMessage(`✅ Added ${product.name} to cart`);
+    setTimeout(() => setToastMessage(null), 2000);
+  };
 
   const tabs = [
-    "Caribbean Favourites",
-    "Snacks & Sides",
-    "Soups with Assorted Meat/Fish",
-    "Swallows & Sides",
-    "African Delights",
-    "Seafood", // ✅ new tab
+    { name: "African Soups ", key: "African Soups", color: "from-green-700 to-green-500" },
+    { name: "African Delights ", key: "African Delights", color: "from-green-700 to-green-500" },
+    { name: "Caribbean Favourites ", key: "Caribbean Favourites", color: "from-yellow-500 to-green-600" },
+    { name: "Caribbean Snacks ", key: "Caribbean Snacks", color: "from-yellow-500 to-green-600" },
+    { name: "Seafood 🌊", key: "Seafood", color: "from-blue-600 to-cyan-400" },
   ];
 
   const getMenuItems = () => {
     switch (activeTab) {
-      case "Caribbean Favourites": return caribbeanFavourites;
-      case "Snacks & Sides": return caribbeanSnacks;
-      case "Soups with Assorted Meat/Fish": return africanSoups;
-      case "Swallows & Sides": return africanSwallows;
-      case "African Delights": return africanDelights;
-      case "Seafood": return seafood; // ✅ handle new tab
-      default: return [];
+      case "African Soups":
+        return africanSoups;
+      case "African Delights":
+        return africanDelights;
+      case "Caribbean Favourites":
+        return caribbeanFavourites;
+      case "Caribbean Snacks":
+        return caribbeanSnacks;
+      case "Seafood":
+        return seafood;
+      default:
+        return [];
     }
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
-      <h2 className="text-3xl font-extrabold text-center mb-8 text-red-600">
+      <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-4 text-red-600 tracking-wide">
         Our Menu 🍴
       </h2>
 
-      {/* 🔹 Tabs */}
-      <div className="flex flex-wrap justify-center gap-3 mb-8">
+      {/* 🌍 Sticky Category Tabs */}
+      <div className="sticky top-0 z-40 bg-white py-3 border-b shadow-sm flex flex-wrap justify-center gap-3 mb-6">
         {tabs.map((tab) => (
           <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-5 py-2 rounded-full font-semibold shadow-md transition ${
-              activeTab === tab
-                ? "bg-gradient-to-r from-red-600 to-orange-500 text-white"
+            key={tab.key}
+            onClick={() => setActiveTab(tab.key)}
+            className={`px-4 py-2 text-xs sm:text-sm md:text-base rounded-full font-semibold shadow-md transition-transform transform hover:scale-105 ${
+              activeTab === tab.key
+                ? `bg-gradient-to-r ${tab.color} text-white`
                 : "bg-gray-200 text-gray-800 hover:bg-red-100"
             }`}
           >
-            {tab}
+            {tab.name}
           </button>
         ))}
       </div>
 
-      {/* 🔹 Meals Grid */}
+      {/* 🧆 Meals */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {getMenuItems().map((item) => (
-          <ProductCard
+          <div
             key={item.id}
-            item={item}
-            hidePrice={activeTab === "Seafood"} // ✅ hide price for seafood
-          />
+            className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300"
+          >
+            <img
+              src={item.image}
+              alt={item.name}
+              className="h-48 sm:h-56 md:h-64 w-full object-cover"
+            />
+            <div className="p-6 text-center">
+              <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
+              {activeTab !== "Seafood" && (
+                <p className="text-gray-600 mt-1 font-medium">£{item.price.toFixed(2)}</p>
+              )}
+
+              <button
+                onClick={() => handleAddToCart(item)}
+                className="mt-3 bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-2 rounded-lg shadow hover:opacity-90 transition"
+              >
+                Add to Cart
+              </button>
+
+              {/* 🍛 Varieties */}
+              {item.varieties && (
+                <div className="mt-4">
+                  <button
+                    onClick={() =>
+                      setExpandedItem(expandedItem === item.id ? null : item.id)
+                    }
+                    className={`px-4 py-2 rounded-full text-sm font-semibold transition shadow-md ${
+                      expandedItem === item.id
+                        ? "bg-gradient-to-r from-orange-500 to-red-600 text-white"
+                        : "bg-gray-100 hover:bg-gray-200 text-red-600"
+                    }`}
+                  >
+                    {expandedItem === item.id ? "Hide Varieties" : "🍽 See Varieties"}
+                  </button>
+
+                  {expandedItem === item.id && (
+                    <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {item.varieties.map((v, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleAddToCart(item, v)}
+                          className="cursor-pointer bg-yellow-50 hover:bg-yellow-100 rounded-xl shadow p-3 transition transform hover:scale-105"
+                        >
+                          <img
+                            src={v.image}
+                            alt={v.name}
+                            className="h-40 w-full object-cover rounded-lg mb-3"
+                          />
+                          <h4 className="text-md font-semibold text-gray-800">{v.name}</h4>
+                          <p className="text-gray-600 text-sm">£{v.price.toFixed(2)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
         ))}
       </div>
 
-      {/* 🔹 Seafood special note */}
-      {activeTab === "Seafood" && (
-        <div className="mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg text-center">
-          <p className="font-semibold">
-            ⚠️ Special Note: Crayfish orders are delivered directly from Nigeria 🇳🇬.  
+      {/* ✅ Toast Message */}
+      {toastMessage && (
+        <div className="fixed bottom-20 right-6 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg text-sm animate-fade-in-out z-50">
+          {toastMessage}
+        </div>
+      )}
+
+      {/* 🛒 Floating Cart Button */}
+      {showCartButton && (
+        <Link
+          to="/cart"
+          className="fixed bottom-6 right-6 bg-gradient-to-r from-red-600 to-orange-500 text-white px-5 py-3 rounded-full shadow-lg flex items-center gap-2 hover:opacity-90 transition z-50"
+        >
+          🛒 <span className="font-semibold">{cart.length}</span>
+        </Link>
+      )}
+      {/* Seafood special note*/}
+      {activeTab === "Seafood" &&(
+        <div className="mt-6 bg-yellow-100 border-|-4 border=yellow-500 text-yellow-800 p-4 rounded-lg text-center">
+          <p className="font-semibold">  ⚠️ Special Note: Crayfish orders are delivered directly from Nigeria 🇳🇬.  
             Please allow extra delivery time before it reaches the UK 🇬🇧.
           </p>
           <p className="text-lg font-semibold text-red-600">
@@ -129,7 +386,7 @@ export default function Menu() {
               +234 806 822 1929
             </a>
           </p>
-        </div>
+          </div>
       )}
     </div>
   );

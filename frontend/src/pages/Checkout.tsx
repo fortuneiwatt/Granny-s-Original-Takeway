@@ -188,8 +188,9 @@ export default function CheckoutPage() {
               )}
             </div>
           ) : (
-            <div className="text-center mt-6">
-              <span className="px-5 py-3 bg-red-600 text-white rounded-lg font-bold text-lg shadow">
+            <div className="text-center mt-4 sm:mt-6 px-3">
+              <span className="inline-block w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-red-600 text-white rounded-lg font-semibold sm:font-bold text-base sm:text-lg shadow-md whitespace-normal sm:whitespace-nowr app
+              ">
                 ❌ Restaurant is currently CLOSED
               </span>
             </div>

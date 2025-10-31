@@ -1,5 +1,6 @@
 import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { CartItem } from "../context/CartContext";
 
 export default function CartPage() {
   const { cart, removeFromCart, clearCart, increaseQuantity, decreaseQuantity } = useCart();
@@ -28,7 +29,7 @@ export default function CartPage() {
       <h2 className="text-4xl font-extrabold mb-8 text-red-600">Your Cart 🛒</h2>
 
       <ul className="space-y-4">
-        {cart.map((item) => (
+        {cart.map((item: CartItem) => (
           <li
             key={item.id}
             className="flex justify-between items-center bg-white shadow-md rounded-lg p-5 border border-gray-100 hover:shadow-lg transition"
@@ -39,11 +40,11 @@ export default function CartPage() {
             </div>
 
             {/* Quantity Controls */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mt-2 sm:mt-0">
               <button
                 onClick={() => decreaseQuantity(item.id)}
                 disabled={item.quantity === 1}
-                className={`px-3 py-1 rounded-full text-lg font-bold transition ${
+                className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-base sm:text-lg font-bold transition ${
                   item.quantity === 1
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "bg-gray-200 hover:bg-gray-300"
@@ -51,10 +52,10 @@ export default function CartPage() {
               >
                 -
               </button>
-              <span className="text-lg font-semibold">{item.quantity}</span>
+              <span className="text-base sm:text-lg font-semibold min-w-[2rem] text-center">{item.quantity}</span>
               <button
                 onClick={() => increaseQuantity(item.id)}
-                className="px-3 py-1 bg-red-600 text-white rounded-full hover:bg-red-700 text-lg font-bold transition"
+                className="px-2 sm:px-3 py-1 sm:py-1.5 bg-red-600 text-white rounded-full hover:bg-red-700 text-base sm:text-lg font-bold transition"
               >
                 +
               </button>

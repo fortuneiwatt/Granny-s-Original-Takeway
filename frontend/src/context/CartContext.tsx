@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react";
 
 // 🛒 Cart Item Type
 export type CartItem = {
-  id: number;
+  id: string | number;
   name: string;
   price: number;
   quantity: number;
@@ -12,11 +12,11 @@ export type CartItem = {
 // 🛒 Context Type
 type CartContextType = {
   cart: CartItem[];
-  addToCart: (item: Omit<CartItem, "quantity">) => void;
-  removeFromCart: (id: number) => void;
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (id: string | number) => void;
   clearCart: () => void;
-  increaseQuantity: (id: number) => void;
-  decreaseQuantity: (id: number) => void;
+  increaseQuantity: (id: string | number) => void;
+  decreaseQuantity: (id: string | number) => void;
 };
 
 // ✅ Create Context
@@ -45,7 +45,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   };
 
   // Remove item completely
-  const removeFromCart = (id: number) => {
+  const removeFromCart = (id: string | number) => {
     setCart((prev) => prev.filter((i) => i.id !== id));
   };
 
@@ -53,7 +53,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const clearCart = () => setCart([]);
 
   // Increase quantity
-  const increaseQuantity = (id: number) => {
+  const increaseQuantity = (id: string | number) => {
     setCart((prev) =>
       prev.map((i) =>
         i.id === id ? { ...i, quantity: i.quantity + 1 } : i
@@ -62,7 +62,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   };
 
   // Decrease quantity (auto-remove if 0)
-  const decreaseQuantity = (id: number) => {
+  const decreaseQuantity = (id: string | number) => {
     setCart((prev) =>
       prev
         .map((i) =>
