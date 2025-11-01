@@ -23,7 +23,7 @@ type MenuItem = {
 const africanSoups: MenuItem[] = [
   {
     id: 1,
-    name: "Afang Soup",
+    name: "Afang Soup Meal",
     price: 0,
     image: "/images/menu/afang.jpg",
     varieties: [
@@ -77,7 +77,7 @@ const africanSoups: MenuItem[] = [
     id: 5,
     name: "Pepper Soup",
     price: 0,
-    image: "/images/menu/peppersoup.jpg",
+    image: "/images/menu/peppersoupp.jpg",
     varieties: [
       { name: "With White Rice", price: 15.0, image: "/images/menu/white_rice.jpg" },
     ],
@@ -97,7 +97,7 @@ const africanSoups: MenuItem[] = [
   },
   {
     id: 22,
-    name: "Fisherman_Soup",
+    name: "Fisherman Soup",
     price: 0,
     image: "/images/menu/fishermansoup.jpg",
     varieties: [
@@ -111,7 +111,7 @@ const africanSoups: MenuItem[] = [
   {
     id: 23,
     name: "Bitterleaf Soup",
-    price: 0 ,
+    price: 0,
     image: "/images/menu/bitterleaf_soup.jpg",
     varieties: [
       { name: "With Poundo", price: 15.0, image: "/images/menu/poundo.jpg" },
@@ -123,12 +123,12 @@ const africanSoups: MenuItem[] = [
   },
 ];
 
-// 🍚 African Delights (with expanded varieties)
+// 🍚 African Delights
 const africanDelights: MenuItem[] = [
   {
     id: 7,
     name: "White Rice",
-    price: 0,
+    price: 0, // Keep normal price — just don’t show if 0
     image: "/images/menu/white_rice.jpg",
     varieties: [
       { name: "With Stew", price: 12.0, image: "/images/menu/stew.jpg" },
@@ -136,7 +136,7 @@ const africanDelights: MenuItem[] = [
       { name: "With Curry Prawns", price: 12.0, image: "/images/menu/stewed_prawns.jpg" },
       { name: "With Fried Plantain & Stew", price: 12.0, image: "/images/menu/fried_plantain.jpg" },
       { name: "With Chicken Stew", price: 12.0, image: "/images/menu/chicken_stew.jpg" },
-      { name: "With fresh-fish Stew", price: 12.0, image: "/images/menu/fish_stew.jpg" },
+      { name: "With Fresh Fish Stew", price: 12.0, image: "/images/menu/fish_stew.jpg" },
     ],
   },
   {
@@ -146,13 +146,13 @@ const africanDelights: MenuItem[] = [
     image: "/images/menu/jollof.jpg",
     varieties: [
       { name: "With Fried Plantain", price: 13.0, image: "/images/menu/fried_plantain.jpg" },
-      { name: "With Chicken", price: 13.0, image: "/images/menu/curry_chicken.jpg" },
-      { name: "With Curry Goat", price: 13.0, image: "/images/menu/curry_goat.jpg" },
+      { name: "With Chicken", price: 13.0, image: "/images/menu/Curry_chicken.jpg" },
+      { name: "With Curry Goat", price: 13.0, image: "/images/menu/Curry_goat.jpg" },
       { name: "With Jerk Chicken", price: 13.0, image: "/images/menu/JERK_CHICKEN.jpg" },
-      { name: "With Chicken stew", price: 13.0, image: "/images/menu/chicken_stew.jpg" },
-      { name: "With Stewed prawns", price: 13.0, image: "/images/menu/stewed_prawns.jpg" },
-      { name: "With fried fish", price: 13.0, image: "/images/menu/fried_fish.jpg" },
-      { name: "With fried meat", price: 13.0, image: "/images/menu/fried_meat.jpg" },
+      { name: "With Chicken Stew", price: 13.0, image: "/images/menu/chicken_stew.jpg" },
+      { name: "With Stewed Prawns", price: 13.0, image: "/images/menu/stewed_prawns.jpg" },
+      { name: "With Fried Fish", price: 13.0, image: "/images/menu/fried_fish.jpg" },
+      { name: "With Fried Meat", price: 13.0, image: "/images/menu/fried_meat.jpg" },
     ],
   },
   {
@@ -162,27 +162,30 @@ const africanDelights: MenuItem[] = [
     image: "/images/menu/fried_rice.jpg",
     varieties: [
       { name: "With Fried Plantain", price: 13.0, image: "/images/menu/fried_plantain.jpg" },
-      { name: "With Chicken", price: 13.0, image: "/images/menu/curry_chicken.jpg" },
-      { name: "With Curry Goat", price: 13.0, image: "/images/menu/curry_goat.jpg" },
+      { name: "With Chicken", price: 13.0, image: "/images/menu/Curry_chicken.jpg" },
+      { name: "With Curry Goat", price: 13.0, image: "/images/menu/Curry_goat.jpg" },
       { name: "With Jerk Chicken", price: 13.0, image: "/images/menu/JERK_CHICKEN.jpg" },
       { name: "With Stew Chicken", price: 13.0, image: "/images/menu/chicken_stew.jpg" },
-      { name: "With Stewed prawns", price: 13.0, image: "/images/menu/stewed_prawns.jpg" },
-      { name: "With fried fish", price: 13.0, image: "/images/menu/fried_fish.jpg" },
-      { name: "With fried meat", price: 13.0, image: "/images/menu/fried_meat.jpg" },
+      { name: "With Stewed Prawns", price: 13.0, image: "/images/menu/stewed_prawns.jpg" },
+      { name: "With Fried Fish", price: 13.0, image: "/images/menu/fried_fish.jpg" },
+      { name: "With Fried Meat", price: 13.0, image: "/images/menu/fried_meat.jpg" },
     ],
   },
   { id: 10, name: "Moi Moi", price: 7.75, image: "/images/menu/moimoi.jpg" },
-  { id: 11, name: "Plantain", price: 7.75, image: "/images/menu/fried_plantain.jpg", 
-    varieties: [
-      { name: "With Stew ", price: 10.0, image: "/images/menu/stew.jpg" },
-    ],
+  {
+    id: 11,
+    name: "Plantain",
+    price: 7.75,
+    image: "/images/menu/fried_plantain.jpg",
+    varieties: [{ name: "With Stew", price: 10.0, image: "/images/menu/stew.jpg" }],
   },
-  { id: 20, name: "Fried Yam", price: 7.75,image: "/images/menu/fried_yam.jpg",
-    varieties: [
-      { name: "With Stew ", price: 10.0, image: "/images/menu/stew.jpg" },
-    ],
-
-   }
+  {
+    id: 20,
+    name: "Fried Yam",
+    price: 7.75,
+    image: "/images/menu/fried_yam.jpg",
+    varieties: [{ name: "With Stew", price: 10.0, image: "/images/menu/stew.jpg" }],
+  },
 ];
 
 // 🍗 Caribbean Favourites
@@ -191,7 +194,7 @@ const caribbeanFavourites: MenuItem[] = [
   { id: 13, name: "Oxtail", price: 12.5, image: "/images/menu/Oxtail.jpg" },
   { id: 14, name: "Jerk Chicken", price: 12.5, image: "/images/menu/JERK_CHICKEN.jpg" },
   { id: 15, name: "Stew Chicken", price: 12.5, image: "/images/menu/stew_chicken.jpg" },
-  { id: 21, name: "seafood combo", price: 12.5, image: "/images/menu/sea_food_combo.jpg"}
+  { id: 21, name: "Seafood Combo", price: 12.5, image: "/images/menu/sea_food_combo.jpg" },
 ];
 
 // 🍩 Caribbean Snacks
@@ -302,7 +305,9 @@ export default function Menu() {
             />
             <div className="p-6 text-center">
               <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
-              {activeTab !== "Seafood" && (
+
+              {/* Hide £0.00 prices */}
+              {item.price > 0 && (
                 <p className="text-gray-600 mt-1 font-medium">£{item.price.toFixed(2)}</p>
               )}
 
@@ -371,13 +376,15 @@ export default function Menu() {
           🛒 <span className="font-semibold">{cart.length}</span>
         </Link>
       )}
-      {/* Seafood special note*/}
-      {activeTab === "Seafood" &&(
-        <div className="mt-6 bg-yellow-100 border-|-4 border=yellow-500 text-yellow-800 p-4 rounded-lg text-center">
-          <p className="font-semibold">  ⚠️ Special Note: Crayfish orders are delivered directly from Nigeria 🇳🇬.  
-            Please allow extra delivery time before it reaches the UK 🇬🇧.
+
+      {/* 🦞 Seafood Special Note */}
+      {activeTab === "Seafood" && (
+        <div className="mt-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg text-center">
+          <p className="font-semibold">
+            ⚠️ Special Note: Crayfish orders are delivered directly from Nigeria .  
+            Please allow extra delivery time before it reaches the UK .
           </p>
-          <p className="text-lg font-semibold text-red-600">
+          <p className="text-lg font-semibold text-red-600 mt-2">
             📞 For inquiries, call/WhatsApp:{" "}
             <a
               href="tel:+2348068221929"
@@ -386,7 +393,7 @@ export default function Menu() {
               +234 806 822 1929
             </a>
           </p>
-          </div>
+        </div>
       )}
     </div>
   );
