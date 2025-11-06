@@ -198,7 +198,7 @@ const caribbeanFavourites: MenuItem[] = [
       { name: "With White Rice", price: 13.5, image: "/images/menu/white_rice.jpg" },
       {
         name: "with 3 slices of plantain",
-        price: 1.0,
+        price: 13.5,
         image: "/images/menu/fried_plantain.jpg",
         hasOptionalVeg: true,
       },
