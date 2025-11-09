@@ -197,8 +197,14 @@ const caribbeanFavourites: MenuItem[] = [
     varieties: [
       { name: "With White Rice", price: 13.5, image: "/images/menu/white_rice.jpg" },
       {
-        name: "with 3 slices of plantain",
+        name: "with 3 plantain Slices",
         price: 13.5,
+        image: "/images/menu/fried_plantain.jpg",
+        hasOptionalVeg: true,
+      },
+      {
+        name: "with 6 plantain Slices",
+        price: 14.5,
         image: "/images/menu/fried_plantain.jpg",
         hasOptionalVeg: true,
       },
@@ -222,10 +228,9 @@ const caribbeanFavourites: MenuItem[] = [
 
 // 🍩 Caribbean Snacks
 const caribbeanSnacks: MenuItem[] = [
-  { id: 16, name: "Fried Dumplings", price: 5.5, image: "/images/menu/frieddumplings.jpg" },
-  { id: 17, name: "Festival", price: 5.5, image: "/images/menu/caribfestival.jpg" },
-  { id: 18, name: "Fritters", price: 7.75, image: "/images/menu/caribfritters.jpg" },
-  { id: 25, name: "Ackee & Saltfish", price: 8.5, image: "/images/menu/ackeeandsaltfish.jpg" },
+  { id: 16, name: "Fried Dumplings (two)", price: 1.5, image: "/images/menu/frieddumplings.jpg" },
+  { id: 17, name: "Festival (two)", price: 1.5, image: "/images/menu/caribfestival.jpg" },
+  { id: 25, name: "Ackee & Saltfish", price: 1.5, image: "/images/menu/ackeeandsaltfish.jpg" },
 ];
 
 // 🌊 Seafood
@@ -300,8 +305,12 @@ export default function Menu() {
     handleAddToCart: (item: MenuItem, variety: VarietyItem) => void;
   }) => {
     const [includeVeg, setIncludeVeg] = useState(false);
+    const [quantity, setQuantity] = useState(1);
 
     const handleClick = () => {
+      let totalExtraPrice = variety.price * quantity;
+      let totalPrice = item.price + totalExtraPrice;
+      let name = `${item.name} (${variety.name} x${quantity * 3} slices)`;
       let selectedVariety = { ...variety };
       if (includeVeg && variety.hasOptionalVeg) {
         selectedVariety = {
@@ -316,6 +325,8 @@ export default function Menu() {
       <div className="cursor-pointer bg-yellow-50 hover:bg-yellow-100 rounded-xl shadow p-3 transition transform hover:scale-105">
         <img src={variety.image} alt={variety.name} className="h-40 w-full object-cover rounded-lg mb-3" />
         <h4 className="text-md font-semibold text-gray-800">{variety.name}</h4>
+        {/* price display*/}
+        {variety.name.toLowerCase().includes("plantain")}
         <p className="text-gray-600 text-sm">£{variety.price.toFixed(2)}</p>
 
         {variety.hasOptionalVeg && (
