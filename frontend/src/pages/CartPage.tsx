@@ -105,18 +105,7 @@ export default function CartPage() {
         <p className="text-lg font-semibold text-gray-700">
           Get Your Meal Delivered To your Doorstep
         </p>
-        <div className="flex flex-wrap justify-center gap-4">
-         
-          <a
-            href="https://deliveroo.co.uk/menu/birmingham/YOUR-RESTAURANT-ID"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition flex items-center gap-2"
-          >
-            🛵 Delivery Coming Soon
-          </a>
-         
-        </div>
+        
       </div>
     </div>
   );

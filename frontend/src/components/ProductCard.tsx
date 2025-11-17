@@ -14,7 +14,7 @@ export default function ProductCard({
   const [added, setAdded] = useState(false);
 
   const handleAdd = () => {
-    addToCart(item);
+    addToCart(Item);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   };

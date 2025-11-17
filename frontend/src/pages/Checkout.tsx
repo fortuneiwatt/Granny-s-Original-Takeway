@@ -16,7 +16,7 @@ const API_BASE =
 
 export default function CheckoutPage() {
   const { cart } = useCart();
-  const [open, setOpen] = useState<boolean | null>(null);
+  const [open, setOpen] = useState<boolean>(true);
   const [address, setAddress] = useState("");
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
@@ -44,7 +44,7 @@ export default function CheckoutPage() {
     events.onerror = () => {
       console.warn("⚠️ SSE connection lost, closing stream.");
       events.close();
-      setOpen(false);
+      setOpen(true);
     };
     return () => events.close();
   }, []);
@@ -69,7 +69,7 @@ export default function CheckoutPage() {
     <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-3xl font-bold mb-6">Checkout</h2>
 
-      {open === null ? (
+      {open === false ? (
         <p className="text-center text-gray-600">Checking restaurant status...</p>
       ) : (
         <div className="space-y-4">
@@ -130,6 +130,18 @@ export default function CheckoutPage() {
           {/* Platform Buttons */}
           {open ? (
             <div className="space-y-3">
+              
+
+              {/* Uber Eats */}
+              <a
+  href={UBEREATS_STORE_URL}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold transition bg-green-600 text-white hover:bg-green-700"
+>
+  🚗 Order via Uber Eats
+</a>
+
               {/* Deliveroo */}
               {DELIVEROO_STORE_URL ? (
                 <a
@@ -146,25 +158,6 @@ export default function CheckoutPage() {
                   className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold bg-gray-400 text-white cursor-not-allowed"
                 >
                   🚧 Deliveroo – Coming Soon
-                </button>
-              )}
-
-              {/* Uber Eats */}
-              {UBEREATS_STORE_URL ? (
-                <a
-                  href={UBEREATS_STORE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold transition bg-green-600 text-white hover:bg-green-700"
-                >
-                  🚗 Order via Uber Eats
-                </a>
-              ) : (
-                <button
-                  disabled
-                  className="block text-center w-full px-6 py-3 rounded-lg shadow font-semibold bg-gray-400 text-white cursor-not-allowed"
-                >
-                  🚧 Uber Eats – Coming Soon
                 </button>
               )}
 

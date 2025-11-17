@@ -26,7 +26,7 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/success" element={<Success />} /> {/* ✅ New */}
           <Route path="/cancel" element={<Cancel />} /> {/* ✅ New */}
-          <Route path="/admin" element={<Admin />} />
+          
 
         </Routes>
       </main>
